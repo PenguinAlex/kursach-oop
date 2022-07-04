@@ -1,8 +1,14 @@
 package main
 
-import httpserver "my-first-go-rest-app"
+import (
+	httpserver "github.com/PenguinAlex/my-first-go-rest-app"
+	"log"
+)
 
 func main() {
-	srv = new(httpserver.Server)
-	if err := srv.Run("8080"); err != nil
+	//запуск сервера на 8080 порту
+	srv := new(httpserver.Server)
+	if err := srv.Run("8080"); err != nil {
+		log.Fatal(err)
+	}
 }
