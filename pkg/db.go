@@ -9,16 +9,8 @@ import (
 	"os"
 )
 
-type Rest struct {
-	Name string `json:"name"`
-}
-
-func SqlSelect(query string) {
+func getAddr() string {
 	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
-	fmt.Println("Started")
 	var dbConf = fmt.Sprintf(
 		"postgres://%s:%s@%s:%s/%s",
 		os.Getenv("DBUSER"),
@@ -27,22 +19,47 @@ func SqlSelect(query string) {
 		os.Getenv("dbport"),
 		os.Getenv("dbname"),
 	)
-	db, err := pgx.Connect(context.Background(), dbConf)
 	if err != nil {
-		panic(err.Error())
+		log.Fatal("Error loading .env file")
 	}
-	defer db.Close(context.Background())
+	return dbConf
+}
+func SqlUpdate(queryRow string) {
+	query := queryRow
+	fmt.Println(query)
+	var dbConf = getAddr()
 
-	results, err := db.Query(context.Background(), query)
+	fmt.Println(dbConf)
+	conn, err := pgx.Connect(context.Background(), dbConf)
 	if err != nil {
-		panic(err.Error())
+		fmt.Println(err)
 	}
-	for results.Next() {
-		var user Rest
-		err = results.Scan(&user.Name)
-		if err != nil {
-			panic(err.Error())
-		}
-		fmt.Println(user.Name)
+	defer conn.Close(context.Background())
+	_, err = conn.Exec(context.Background(), query)
+	if err != nil {
+		fmt.Println(err)
 	}
+
+}
+func SqlSelectInfo(queryRow string) []string {
+	var info []string
+	query := queryRow
+	var dbConf = getAddr()
+
+	fmt.Println(dbConf)
+	conn, err := pgx.Connect(context.Background(), dbConf)
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer conn.Close(context.Background())
+	rows, err := conn.Query(context.Background(), query)
+	for rows.Next() {
+		var str string
+		rows.Scan(&str)
+		info = append(info, str)
+	}
+	defer conn.Close(context.Background())
+
+	fmt.Println(info)
+	return info
 }
