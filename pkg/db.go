@@ -9,6 +9,7 @@ import (
 	"os"
 )
 
+//сборка адреса бд из окружения
 func getAddr() string {
 	err := godotenv.Load()
 	var dbConf = fmt.Sprintf(
@@ -24,35 +25,44 @@ func getAddr() string {
 	}
 	return dbConf
 }
+
+//апдейт квери к БД
 func SqlUpdate(queryRow string) {
 	query := queryRow
 	fmt.Println(query)
 	var dbConf = getAddr()
 
 	fmt.Println(dbConf)
+	//подключение к БД
 	conn, err := pgx.Connect(context.Background(), dbConf)
 	if err != nil {
 		fmt.Println(err)
 	}
 	defer conn.Close(context.Background())
+	//выполение запроса
 	_, err = conn.Exec(context.Background(), query)
 	if err != nil {
 		fmt.Println(err)
 	}
 
 }
+
+//селект квери
 func SqlSelectInfo(queryRow string) []string {
 	var info []string
 	query := queryRow
 	var dbConf = getAddr()
 
 	fmt.Println(dbConf)
+	//подключение к БД
 	conn, err := pgx.Connect(context.Background(), dbConf)
 	if err != nil {
 		fmt.Println(err)
 	}
 	defer conn.Close(context.Background())
+	//получение строк  по селекту
 	rows, err := conn.Query(context.Background(), query)
+	//чтение строк в массив стрингов
 	for rows.Next() {
 		var str string
 		rows.Scan(&str)
