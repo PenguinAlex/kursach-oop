@@ -2,7 +2,7 @@
 >> - Node.js
 >> - Golang
 ># Запуск
->> - sqldump-backup/bckp.backup - дамп БД 
+>> - sqldump-backup/bckp.backup - дамп БД (БД под докером)
 >> ## Backend 
 >>### из главной дирректории 
 >>>- go mod tidy --> установка зависимостей
