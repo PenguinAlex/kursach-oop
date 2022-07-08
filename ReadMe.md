@@ -10,4 +10,4 @@
 >> ## Frontend
 >>### из главной дирректории
 >>>  npm i ./simple-front - установка нод-модулей
->>> npm start --prefix ./simple-front  - запуск фронта
+>>> npm start --prefix ./simple-front - запуск фронта

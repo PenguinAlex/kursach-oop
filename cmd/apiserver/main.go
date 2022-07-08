@@ -26,7 +26,7 @@ func getRestaurant(context *gin.Context) {
 
 //main обработка запросов
 func main() {
-	//загрузка окржения
+	//загрузка окружения
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("Error loading .env file")
